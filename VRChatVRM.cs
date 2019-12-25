@@ -1,12 +1,22 @@
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using VRM;
 
 public class VRChatVRM : EditorWindow {
-    [MenuItem("Assets/Create/VRMMetaObject")]
+    [MenuItem("Assets/Create/VRM/VRMMetaObject")]
     public static void CreateVRMMetaObjectAsset() {
-        ProjectWindowUtil.CreateAsset(CreateInstance<VRMMetaObject>(), "Meta.asset");
+        ProjectWindowUtil.CreateAsset(CreateInstance<VRMMetaObject>(), "VRMMetaObject.asset");
+    }
+
+    [MenuItem("CONTEXT/BlendShapeAvatar/CreateDefaultPresets")]
+    public static void CreateBlendShapeAvatar(MenuCommand menuCommand) {
+        var blendShapeAvatar = menuCommand.context as BlendShapeAvatar;
+        blendShapeAvatar.CreateDefaultPreset();
+        var basePath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(blendShapeAvatar));
+        foreach (var clip in blendShapeAvatar.Clips) {
+            AssetDatabase.CreateAsset(clip, Path.Combine(basePath, clip.name + ".asset"));
+        }
     }
  
     [MenuItem("Window/VRMとの切り替え")]
@@ -43,12 +53,6 @@ public class VRChatVRM : EditorWindow {
             var vrmBlendShapeProxy = Avatar.GetOrAddComponent<VRMBlendShapeProxy>();
             vrmBlendShapeProxy.BlendShapeAvatar = BlendShapeAvatar;
         }
-        if (Avatar.transform.Find("secondary") == null) {
-            var secondary = new GameObject("secondary");
-            secondary.transform.parent = Avatar.transform;
-            secondary.name = "secondary";
-            SetSecondary(secondary);
-        }
     }
 
     public void Revert () {
@@ -56,17 +60,5 @@ public class VRChatVRM : EditorWindow {
         if (vrmMeta != null) DestroyImmediate(vrmMeta);
         var vrmBlendShapeProxy = Avatar.GetComponent<VRMBlendShapeProxy>();
         if (vrmBlendShapeProxy != null) DestroyImmediate(vrmBlendShapeProxy);
-        var secondary = Avatar.transform.Find("secondary");
-        if (secondary != null) DestroyImmediate(secondary.gameObject);
-    }
-
-    void SetSecondary(GameObject gameObject) {
-        var vrmSpringBone = gameObject.GetOrAddComponent<VRMSpringBone>();
-        vrmSpringBone.RootBones = new List<Transform> {
-            Avatar.transform.Find("body/hips/spine/chest/neck/head/pony_tail_joint"),
-            Avatar.transform.Find("body/hips/spine/chest/neck/head/lower_ahoge"),
-            Avatar.transform.Find("body/hips/spine/bust.L"),
-            Avatar.transform.Find("body/hips/spine/bust.R"),
-        };
     }
 }
