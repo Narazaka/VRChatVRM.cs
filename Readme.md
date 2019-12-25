@@ -12,13 +12,16 @@ VRM関連のコンポーネントが付いてるとVRChatでビルドできな�
 
 0. Editorフォルダをどこかに作って[`VRChatVRM.cs`](VRChatVRM.cs)をてきとうにUnityにつっこむ。UniVRM入ってる前提。
 1. VRMMetaObjectがアセットのメニューから作れるようになってるんで、そこに説明とか色々書く。
-2. BlendShapeを設定したい場合は一度当該モデルをVRM出力して、そのままインポートしたら出来るBlendShapeを使う。
-3. SpringBoneの設定は**自分用のがべた書きしてる**のでてきとうにファイル書き換えてざっくりやってどうぞ。
-4. VRChatに突っ込むときはVRMはずす、VRM出力するときはVRM適用してTポーズとかのチェック入れて出力がよさげかと。
+2. BlendShapeもアセットメニューから作成しできる。デフォルト表情系はBlendShapeファイルを選択してインスペクター右上のメニューから「CreateDefaultPresets」で作れる。
+3. VRChatに突っ込むときはVRMはずす、VRM出力するときはVRM適用してTポーズとかのチェック入れて出力がよさげかと。
 
 ## 注意
 
-たいして揺れ物とか無い自作モデルを凄く雑な感じでVRMに出力するためのやつなんで、上手くいかないとかは普通にあると思います。
+自作モデルを凄く雑な感じでVRMに出力するためのやつなんで、上手くいかないとかは普通にあると思います。
+
+## DynamicBoneとSpringBoneの変換はどうするか？
+
+[[Unityエディタ拡張]ReflectBoneSetting](https://mrslip777.booth.pm/items/1596377)がそれっぽい。
 
 ## ライセンス
 
